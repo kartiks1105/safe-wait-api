@@ -1,4 +1,5 @@
 import psycopg2
+from database.tables.driver_information import DriverInformation
 
 from database.tables.student_information import StudentInformation
 
@@ -26,4 +27,12 @@ class PostgreSQL:
         self.cursor.execute(query, [student_id])
         row = self.cursor.fetchone()
         return StudentInformation(row) if row else None
-        
+    
+    def get_driver_information(self, student_id):
+        query = '''
+            SELECT * FROM driver_information
+            WHERE student_id = %s
+        '''
+        self.cursor.execute(query, [student_id])
+        row = self.cursor.fetchone()
+        return DriverInformation(row) if row else None

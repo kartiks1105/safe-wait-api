@@ -10,11 +10,21 @@ psql = PostgreSQL()
 
 
 @app.route("/getStudentInformation")
-def hello_world():
+def get_student_information():
     param = request.args
     student_id = param.get("studentId")
     student_info = psql.get_student_information(student_id)
     resp = {
         "StudentInformation": student_info.__dict__ if student_info else None
+    }
+    return json.dumps(resp, indent=4)
+
+@app.route("/getDriverInformation")
+def get_driver_information():
+    param = request.args
+    student_id = param.get("studentId")
+    driver_info = psql.get_driver_information(student_id)
+    resp = {
+        "DriverInformation": driver_info.__dict__ if driver_info else None
     }
     return json.dumps(resp, indent=4)
