@@ -13,7 +13,8 @@ psql = PostgreSQL()
 def get_student_information():
     param = request.args
     student_id = param.get("studentId")
-    student_info = psql.get_student_information(student_id)
+    password = param.get("password")
+    student_info = psql.get_student_information(student_id, password)
     resp = {
         "StudentInformation": student_info.__dict__ if student_info else None
     }

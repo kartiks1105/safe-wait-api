@@ -19,12 +19,13 @@ class PostgreSQL:
         self.cursor.close()
         self.connection.close()
     
-    def get_student_information(self, student_id):
+    def get_student_information(self, student_id, password):
         query = '''
             SELECT * FROM student_information
             WHERE student_id = %s
+            AND password = %s
         '''
-        self.cursor.execute(query, [student_id])
+        self.cursor.execute(query, [student_id, password])
         row = self.cursor.fetchone()
         return StudentInformation(row) if row else None
     
