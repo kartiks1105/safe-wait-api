@@ -24,7 +24,8 @@ def get_student_information():
 def get_driver_information():
     param = request.args
     student_id = param.get("studentId")
-    driver_info = psql.get_driver_information(student_id)
+    password = param.get("password")
+    driver_info = psql.get_driver_information(student_id, password)
     resp = {
         "DriverInformation": driver_info.__dict__ if driver_info else None
     }

@@ -29,11 +29,12 @@ class PostgreSQL:
         row = self.cursor.fetchone()
         return StudentInformation(row) if row else None
     
-    def get_driver_information(self, student_id):
+    def get_driver_information(self, student_id, password):
         query = '''
             SELECT * FROM driver_information
             WHERE student_id = %s
+            AND password = %s
         '''
-        self.cursor.execute(query, [student_id])
+        self.cursor.execute(query, [student_id, password])
         row = self.cursor.fetchone()
         return DriverInformation(row) if row else None
