@@ -4,6 +4,9 @@ from flask import Flask, request
 
 from database.postgresql import PostgreSQL
 from util import Util
+import itertools
+import requests
+import sys
 
 
 app = Flask(__name__)
@@ -34,24 +37,36 @@ def getDurationBetweenTwoLocations():
     seconds = util.durationBetweenTwoLocations(data['origin'], data['destination'])
     return {'seconds': seconds}
 
-# @app.route("/getStudentInformation")
-# def get_student_information():
-#     param = request.args
-#     student_id = param.get("studentId")
-#     password = param.get("password")
-#     student_info = psql.get_student_information(student_id, password)
-#     resp = {
-#         "StudentInformation": student_info.__dict__ if student_info else None
-#     }
-#     return json.dumps(resp, indent=4)
+@app.route("/getBestRoute", methods=['POST'])
+def getBestRoute():
+    data = request.get_json()
+    addresses = data['addresses']
+    addresses = list(itertools.permutations(addresses))
+    duration = sys.maxsize
 
-# @app.route("/getDriverInformation")
-# def get_driver_information():
-#     param = request.args
-#     student_id = param.get("studentId")
-#     password = param.get("password")
-#     driver_info = psql.get_driver_information(student_id, password)
-#     resp = {
-#         "DriverInformation": driver_info.__dict__ if driver_info else None
-#     }
-#     return json.dumps(resp, indent=4)
+    for address in addresses:
+        sequence = list(address)
+        sequence.insert(0, "Head Hall, Fredericton")
+        sequence.append("Head Hall, Fredericton")
+
+        time = 0
+
+        for i in range(len(sequence)):
+            body = {
+                "origin": sequence[i - 1],
+                "destination": sequence[i]
+            }
+            resp = requests.post("http://127.0.0.1:5000/getDurationBetweenTwoLocations", json=body)
+            resp = resp.json()
+            time += resp['seconds']
+        
+        if time < duration:
+            duration = time
+            route = sequence
+        
+
+
+    return {
+        "duration": duration,
+        "route": route
+    }
