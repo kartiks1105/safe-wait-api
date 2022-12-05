@@ -8,11 +8,17 @@ from database.postgresql import PostgreSQL
 app = Flask(__name__)
 psql = PostgreSQL()
 
-@app.route("/verifyStudent", methods=['POST'])
-def verifyStudent():
+@app.route("/getStudentInformation", methods=['POST'])
+def getStudentInformation():
     data = request.get_json()
-    resp = psql.verifyStudent(data['student_id'], data['password'])
-    return {'account_data': resp}
+    resp = psql.getStudentInformation(data['student_id'], data['password'])
+    return {'studentInformation': resp}
+
+@app.route("/getDriverInformation", methods=['POST'])
+def getDriverInformation():
+    data = request.get_json()
+    resp = psql.getDriverInformation(data['student_id'], data['password'])
+    return {'driverInformation': resp}
 
 # @app.route("/getStudentInformation")
 # def get_student_information():
