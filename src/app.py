@@ -3,10 +3,12 @@ import json
 from flask import Flask, request
 
 from database.postgresql import PostgreSQL
+from util import Util
 
 
 app = Flask(__name__)
 psql = PostgreSQL()
+util = Util()
 
 @app.route("/getStudentInformation", methods=['POST'])
 def getStudentInformation():
@@ -19,6 +21,12 @@ def getDriverInformation():
     data = request.get_json()
     resp = psql.getDriverInformation(data['student_id'], data['password'])
     return {'driverInformation': resp}
+
+@app.route("/getPredictions", methods=['POST'])
+def getPredictions():
+    data = request.get_json()
+    resp = util.getPredictions(data['place'])
+    return {'predictions': resp}
 
 # @app.route("/getStudentInformation")
 # def get_student_information():
