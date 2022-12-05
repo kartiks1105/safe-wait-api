@@ -19,3 +19,13 @@ class Util:
         for prediction in resp['predictions']:
             predictions.append(prediction['description'])
         return predictions
+
+    def durationBetweenTwoLocations(self, origin, destination):
+        params = {
+            "origins": origin,
+            "destinations": destination,
+            "key": self.API_KEY
+        }
+        resp = requests.get("https://maps.googleapis.com/maps/api/distancematrix/json", params=params)
+        resp = resp.json()
+        return int(resp['rows'][0]['elements'][0]['duration']['value'])
