@@ -28,6 +28,12 @@ def getPredictions():
     resp = util.getPredictions(data['place'])
     return {'predictions': resp}
 
+@app.route("/getDurationBetweenTwoLocations", methods=['POST'])
+def getDurationBetweenTwoLocations():
+    data = request.get_json()
+    seconds = util.durationBetweenTwoLocations(data['origin'], data['destination'])
+    return {'seconds': seconds}
+
 # @app.route("/getStudentInformation")
 # def get_student_information():
 #     param = request.args
