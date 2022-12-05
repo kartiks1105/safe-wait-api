@@ -8,25 +8,30 @@ from database.postgresql import PostgreSQL
 app = Flask(__name__)
 psql = PostgreSQL()
 
+@app.route("/verifyStudent", methods=['POST'])
+def verifyStudent():
+    data = request.get_json()
+    resp = psql.verifyStudent(data['student_id'], data['password'])
+    return {'account_data': resp}
 
-@app.route("/getStudentInformation")
-def get_student_information():
-    param = request.args
-    student_id = param.get("studentId")
-    password = param.get("password")
-    student_info = psql.get_student_information(student_id, password)
-    resp = {
-        "StudentInformation": student_info.__dict__ if student_info else None
-    }
-    return json.dumps(resp, indent=4)
+# @app.route("/getStudentInformation")
+# def get_student_information():
+#     param = request.args
+#     student_id = param.get("studentId")
+#     password = param.get("password")
+#     student_info = psql.get_student_information(student_id, password)
+#     resp = {
+#         "StudentInformation": student_info.__dict__ if student_info else None
+#     }
+#     return json.dumps(resp, indent=4)
 
-@app.route("/getDriverInformation")
-def get_driver_information():
-    param = request.args
-    student_id = param.get("studentId")
-    password = param.get("password")
-    driver_info = psql.get_driver_information(student_id, password)
-    resp = {
-        "DriverInformation": driver_info.__dict__ if driver_info else None
-    }
-    return json.dumps(resp, indent=4)
+# @app.route("/getDriverInformation")
+# def get_driver_information():
+#     param = request.args
+#     student_id = param.get("studentId")
+#     password = param.get("password")
+#     driver_info = psql.get_driver_information(student_id, password)
+#     resp = {
+#         "DriverInformation": driver_info.__dict__ if driver_info else None
+#     }
+#     return json.dumps(resp, indent=4)
