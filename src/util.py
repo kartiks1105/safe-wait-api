@@ -13,7 +13,7 @@ class Util:
             "key": self.API_KEY,
             "radius": self.RADIUS
         }
-        resp = requests.get("https://maps.googleapis.com/maps/api/place/autocomplete/json?location=45.9636%2C-66.6431", params=params)
+        resp = requests.get("https://maps.googleapis.com/maps/api/place/autocomplete/json?location=45.9636%2C-66.6431&strictbounds=true", params=params)
         resp = resp.json()
         predictions = []
         for prediction in resp['predictions']:
