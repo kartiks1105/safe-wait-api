@@ -41,6 +41,24 @@ def getDurationBetweenTwoLocations():
 def getBestRoute():
     data = request.get_json()
     addresses = data['addresses']
+
+    predictedAddresses = []
+
+    for address in addresses:
+        body = {
+            "place": address
+        }
+        resp = requests.post("http://127.0.0.1:5000/getPredictions", json=body)
+        resp = resp.json()
+        predictions = resp['predictions']
+        if predictions:
+            predictedAddresses.append(predictions[0])
+        else:
+            #error
+            pass
+    
+    addresses = predictedAddresses
+
     addresses = list(itertools.permutations(addresses))
     duration = sys.maxsize
 

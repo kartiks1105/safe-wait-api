@@ -28,4 +28,5 @@ class Util:
         }
         resp = requests.get("https://maps.googleapis.com/maps/api/distancematrix/json", params=params)
         resp = resp.json()
+        print(resp['rows'][0]['elements'][0])
         return int(resp['rows'][0]['elements'][0]['duration']['value'])
