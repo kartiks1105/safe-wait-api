@@ -62,6 +62,8 @@ def getBestRoute():
     addresses = list(itertools.permutations(addresses))
     duration = sys.maxsize
 
+    hashmap = {}
+
     for address in addresses:
         sequence = list(address)
         sequence.insert(0, "Head Hall, Fredericton")
@@ -70,13 +72,18 @@ def getBestRoute():
         time = 0
 
         for i in range(len(sequence)):
-            body = {
-                "origin": sequence[i - 1],
-                "destination": sequence[i]
-            }
-            resp = requests.post("http://127.0.0.1:5000/getDurationBetweenTwoLocations", json=body)
-            resp = resp.json()
-            time += resp['seconds']
+            if (sequence[i - 1], sequence[i]) in hashmap:
+                time += hashmap[(sequence[i - 1], sequence[i])]
+            else:
+                body = {
+                    "origin": sequence[i - 1],
+                    "destination": sequence[i]
+                }
+                resp = requests.post("http://127.0.0.1:5000/getDurationBetweenTwoLocations", json=body)
+                resp = resp.json()
+                time += resp['seconds']
+                hashmap[(sequence[i - 1], sequence[i])] = resp['seconds']
+                hashmap[(sequence[i], sequence[i - 1])] = resp['seconds']
         
         if time < duration:
             duration = time
