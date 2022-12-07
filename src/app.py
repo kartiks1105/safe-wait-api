@@ -44,9 +44,9 @@ def getBestRoute():
 
     predictedAddresses = []
 
-    for address in addresses:
+    for i in range(len(addresses)):
         body = {
-            "place": address
+            "place": addresses[i]
         }
         resp = requests.post("http://127.0.0.1:5000/getPredictions", json=body)
         resp = resp.json()
@@ -55,7 +55,7 @@ def getBestRoute():
             predictedAddresses.append(predictions[0])
         else:
             #error
-            pass
+            return { "invalidPosition": i + 1 }
     
     addresses = predictedAddresses
 
@@ -86,5 +86,6 @@ def getBestRoute():
 
     return {
         "duration": duration,
-        "route": route
+        "route": route,
+        "invalidPosition": -1
     }
